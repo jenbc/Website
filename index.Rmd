@@ -17,9 +17,9 @@ for a paragraph, just type normally.
 
 column 1 | column 2
 ---|---
-Phillies | National
-Yankees | American
-Cubs | National
-Red Sox | American
+Big Bang | VIPs
+EXO | Exo-l
+DBSK | Cassies
+Super Junior | Elfs
 
 <img src="BTS2.jpg" width="300" />
