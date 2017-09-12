@@ -17,3 +17,38 @@ query<-"SELECT playerID,yearID,teamID,HR From Batting
 Where teamID='NYA' and yearID=1927"
 sqldf(query)
 ```
+Batting
+colnames(Batting)
+
+Here we will learn how to create a query for New York Yankee player that have more than 40 homeruns
+```{r}
+query<-"SELECT playerID,yearID,teamID,HR From Batting
+Where teamID='NYA' and HR>=40"
+sqldf(query)
+```
+Examples of player having more than 40HR but less than 60strikeouts(SO)
+```{r}
+query1<-"SELECT playerID,yearID,teamID,SO,HR From Batting
+Where SO<60 and HR>40"
+sqldf(query1)
+```
+Instances of Phillies in the 1970's hitting more than 30 homeruns
+```{r}
+query2<-"SELECT playerID,yearID,teamID,HR From Batting
+Where yearID>1970 and yearID<1979 and HR>=30 and teamID='PHI'"
+sqldf(query2)
+```
+Player hits more than 50 homeruns but lets have players with the most homeruns at the top 
+```{r}
+query3<-"SELECT playerID,yearID,teamID,HR From Batting
+Where HR>=50
+Order By HR DESC"
+sqldf(query3)
+```
+Find ll instances ofa player striking out less than 10 times. At least 400 at-bat(AB). Players with least SO at top
+```{r}
+query4<-"SELECT playerID,yearID,teamID,SO, AB From Batting
+Where AB>=400 and SO<10
+Order by SO"
+sqldf(query4)
+```
