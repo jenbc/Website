@@ -3,23 +3,17 @@ title: "SQL"
 output: html_document
 ---
 
+##filtering rows and comlums 
+with Sql you can filter coloumns with Select and Rows with Where. Let us look at an example wusing Lahman baseball database. First, we need to need to load some packages. 
 
-# This is a first-level header
-## This is a second-level header
-### This is a third-level header
-
-for a paragraph, just type normally.
-
-* item 1
-* item 2
-* item 3
-* item 4
-
-column 1 | column 2
----|---
-Big Bang | VIPs
-EXO | Exo-l
-DBSK | Cassies
-Super Junior | Elfs
-
-<img src="BTS2.jpg" width="300" />
+```{r warning=FALSE, message=FALSE}
+library(Lahman)
+library(sqldf)
+```
+r
+Suppose we want to see the total number of homeruns for the Yankees in 1927. We could write the following
+```{r}
+query<-"SELECT playerID,yearID,teamID,HR From Batting
+Where teamID='NYA' and yearID=1927"
+sqldf(query)
+```
