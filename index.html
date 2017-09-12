@@ -120,12 +120,10 @@ $(document).ready(function () {
 </div>
 
 
-<div id="filtering-rows-and-comlums" class="section level2">
-<h2>filtering rows and comlums</h2>
-<p>with Sql you can filter coloumns with Select and Rows with Where. Let us look at an example wusing Lahman baseball database. First, we need to need to load some packages.</p>
+<p>filtering rows and comlums With SQL we can filter coloumns with SELECT and rows with WHERE. To show this I will use the Lahman package on RStudio, which is a baseball database. First, we need to need to install two packages: Lahman and sqldf.</p>
 <pre class="r"><code>library(Lahman)
 library(sqldf)</code></pre>
-<p>r Suppose we want to see the total number of homeruns for the Yankees in 1927. We could write the following</p>
+<p>Suppose we want to see the total number of homeruns for the Yankees in 1927. We could write the following</p>
 <pre class="r"><code>query&lt;-&quot;SELECT playerID,yearID,teamID,HR From Batting
 Where teamID='NYA' and yearID=1927&quot;
 sqldf(query)</code></pre>
@@ -357,7 +355,6 @@ sqldf(query4)</code></pre>
 ## 63 holmeto01   1945    BSN  9 636
 ## 64 boudrlo01   1948    CLE  9 560
 ## 65 mitchda01   1952    CLE  9 511</code></pre>
-</div>
 
 
 
