@@ -1,10 +1,11 @@
 ---
-title: "SQL"
+title: "Usage of SQL"
 output: html_document
 ---
 
-filtering rows and comlums 
-With SQL we can filter coloumns with SELECT and rows with WHERE. To show this I will use the Lahman package on RStudio, which is a baseball database. First, we need to need to install two packages: Lahman and sqldf. 
+Filtering Rows and Comlums 
+
+With SQL we can filter coloumns with SELECT and rows with WHERE. To show this I will use the Lahman package on RStudio, which is a baseball database. First, we need to need to install the two packages: Lahman and sqldf. 
 
 
 ```{r warning=FALSE, message=FALSE}
@@ -39,7 +40,9 @@ query2<-"SELECT playerID,yearID,teamID,HR From Batting
 Where yearID>1970 and yearID<1979 and HR>=30 and teamID='PHI'"
 sqldf(query2)
 ```
-Player hits more than 50 homeruns but lets have players with the most homeruns at the top 
+Ranking Data 
+For this example we will present
+Player hits with more than 50 homeruns but lets have players with the most homeruns at the top 
 ```{r}
 query3<-"SELECT playerID,yearID,teamID,HR From Batting
 Where HR>=50
