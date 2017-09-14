@@ -56,3 +56,73 @@ Where AB>=400 and SO<10
 Order by SO"
 sqldf(query4)
 ```
+
+Aggregation
+Aggreation is the clustering of pieces to output one final result. This can be achieved my using 
+grouping and Sum and average. Continuing with our use of the Lahman database
+Example 1
+Find Babe Ruth's career homerun total and squash it into one
+no comma after homerun
+```{r}
+query5<-"select playerID, sum(HR) From Batting
+WHERE playerID='ruthba01'
+Group by playerID"
+
+sqldf(query5)
+```
+find the homerun totals of all players but limit the display to only those that hit 600 or 
+more. The players with the highest total at the top
+where is filtering before group and having is grouping after
+```{r}
+query6<-"select playerID, sum(HR) From Batting
+Group by playerID
+Having sum(HR)>600
+Order by sum(HR) Desc"
+
+sqldf(query6)
+```
+Here we will find the players with the highest homerun average over their career.
+We will filter out those who have an average of more than 30 HR showing players with the best 
+average at the top
+avg() #max() #min()
+```{r}
+query7<-"select playerID, avg(HR) From Batting
+Group by playerID
+Having avg(HR)>30
+Order by avg(HR) Desc"
+
+sqldf(query7)
+```
+Joins
+this is the joining of two tables using the common variable in both tables using Inner Join and
+ On Table1.variable=Table2.variable. When mentioning the variable I have to specify which
+table it is coming from as seen in the Where table.variable example
+list firstname, lastname, year, teamID and HR
+colnames(master) #to find other details
+```{r}
+query8<-"select nameFirst, nameLast, yearID, teamID, HR 
+From Batting Inner Join Master
+On Batting.playerID=Master.playerID
+Where Batting.playerID='ruthba01'"
+sqldf(query8)
+```
+
+Find all instances where players hitting more than 50 homeruns give their full name
+```{r}
+query9<-"Select nameFirst, nameLast, yearID, teamID, HR 
+From Batting Inner Join Master
+On Batting.playerID=Master.playerID
+Where Hr>50
+order by HR Desc"
+sqldf(query9)
+```
+Babe ruth with his team name using Teams database
+```{r}
+query10<-"Select playerID, Batting.yearID, name, Batting.HR 
+From Batting Inner Join Teams 
+On Batting.teamID=Teams.teamID AND Batting.yearID=Teams.yearID
+Where playerID='ruthba01'
+order by Batting.HR Desc"
+sqldf(query10)
+```
+

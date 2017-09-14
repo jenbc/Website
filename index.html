@@ -121,7 +121,7 @@ $(document).ready(function () {
 
 
 <p>Filtering Rows and Comlums</p>
-<p>With SQL we can filter coloumns with SELECT and rows with WHERE. To show this I will use the Lahman package on RStudio, which is a baseball database. First, we need to need to install two packages: Lahman and sqldf.</p>
+<p>With SQL we can filter coloumns with SELECT and rows with WHERE. To show this I will use the Lahman package on RStudio, which is a baseball database. First, we need to need to install the two packages: Lahman and sqldf.</p>
 <pre class="r"><code>library(Lahman)
 library(sqldf)</code></pre>
 <p>Suppose we want to see the total number of homeruns for the Yankees in 1927. We could write the following</p>
@@ -237,7 +237,7 @@ sqldf(query2)</code></pre>
 ## 7 luzingr01   1977    PHI 39
 ## 8 schmimi01   1977    PHI 38
 ## 9 luzingr01   1978    PHI 35</code></pre>
-<p>Player hits more than 50 homeruns but lets have players with the most homeruns at the top</p>
+<p>Ranking Data For this example we will present Player hits with more than 50 homeruns but lets have players with the most homeruns at the top</p>
 <pre class="r"><code>query3&lt;-&quot;SELECT playerID,yearID,teamID,HR From Batting
 Where HR&gt;=50
 Order By HR DESC&quot;
@@ -356,6 +356,154 @@ sqldf(query4)</code></pre>
 ## 63 holmeto01   1945    BSN  9 636
 ## 64 boudrlo01   1948    CLE  9 560
 ## 65 mitchda01   1952    CLE  9 511</code></pre>
+<p>Aggregation Aggreation is the clustering of pieces to output one final result. This can be achieved my using grouping and Sum and average. Continuing with our use of the Lahman database Example 1 Find Babe Ruth’s career homerun total and squash it into one no comma after homerun</p>
+<pre class="r"><code>query5&lt;-&quot;select playerID, sum(HR) From Batting
+WHERE playerID='ruthba01'
+Group by playerID&quot;
+
+sqldf(query5)</code></pre>
+<pre><code>##   playerID sum(HR)
+## 1 ruthba01     714</code></pre>
+<p>find the homerun totals of all players but limit the display to only those that hit 600 or more. The players with the highest total at the top where is filtering before group and having is grouping after</p>
+<pre class="r"><code>query6&lt;-&quot;select playerID, sum(HR) From Batting
+Group by playerID
+Having sum(HR)&gt;600
+Order by sum(HR) Desc&quot;
+
+sqldf(query6)</code></pre>
+<pre><code>##    playerID sum(HR)
+## 1 bondsba01     762
+## 2 aaronha01     755
+## 3  ruthba01     714
+## 4 rodrial01     696
+## 5  mayswi01     660
+## 6 griffke02     630
+## 7 thomeji01     612
+## 8  sosasa01     609</code></pre>
+<p>Here we will find the players with the highest homerun average over their career. We will filter out those who have an average of more than 30 HR showing players with the best average at the top avg() #max() #min()</p>
+<pre class="r"><code>query7&lt;-&quot;select playerID, avg(HR) From Batting
+Group by playerID
+Having avg(HR)&gt;30
+Order by avg(HR) Desc&quot;
+
+sqldf(query7)</code></pre>
+<pre><code>##     playerID  avg(HR)
+## 1  pujolal01 36.93750
+## 2  bondsba01 34.63636
+## 3  mcgwima01 34.29412
+## 4  kinerra01 33.54545
+## 5  aaronha01 32.82609
+## 6  bryankr01 32.50000
+## 7   ruthba01 32.45455
+## 8   sosasa01 32.05263
+## 9  cabremi01 31.85714
+## 10 belleal01 31.75000
+## 11 rodrial01 31.63636
+## 12 schmimi01 30.44444
+## 13 abreujo02 30.33333</code></pre>
+<p>Joins this is the joining of two tables using the common variable in both tables using Inner Join and On Table1.variable=Table2.variable. When mentioning the variable I have to specify which table it is coming from as seen in the Where table.variable example list firstname, lastname, year, teamID and HR colnames(master) #to find other details</p>
+<pre class="r"><code>query8&lt;-&quot;select nameFirst, nameLast, yearID, teamID, HR 
+From Batting Inner Join Master
+On Batting.playerID=Master.playerID
+Where Batting.playerID='ruthba01'&quot;
+sqldf(query8)</code></pre>
+<pre><code>##    nameFirst nameLast yearID teamID HR
+## 1       Babe     Ruth   1914    BOS  0
+## 2       Babe     Ruth   1915    BOS  4
+## 3       Babe     Ruth   1916    BOS  3
+## 4       Babe     Ruth   1917    BOS  2
+## 5       Babe     Ruth   1918    BOS 11
+## 6       Babe     Ruth   1919    BOS 29
+## 7       Babe     Ruth   1920    NYA 54
+## 8       Babe     Ruth   1921    NYA 59
+## 9       Babe     Ruth   1922    NYA 35
+## 10      Babe     Ruth   1923    NYA 41
+## 11      Babe     Ruth   1924    NYA 46
+## 12      Babe     Ruth   1925    NYA 25
+## 13      Babe     Ruth   1926    NYA 47
+## 14      Babe     Ruth   1927    NYA 60
+## 15      Babe     Ruth   1928    NYA 54
+## 16      Babe     Ruth   1929    NYA 46
+## 17      Babe     Ruth   1930    NYA 49
+## 18      Babe     Ruth   1931    NYA 46
+## 19      Babe     Ruth   1932    NYA 41
+## 20      Babe     Ruth   1933    NYA 34
+## 21      Babe     Ruth   1934    NYA 22
+## 22      Babe     Ruth   1935    BSN  6</code></pre>
+<p>Find all instances where players hitting more than 50 homeruns give their full name</p>
+<pre class="r"><code>query9&lt;-&quot;Select nameFirst, nameLast, yearID, teamID, HR 
+From Batting Inner Join Master
+On Batting.playerID=Master.playerID
+Where Hr&gt;50
+order by HR Desc&quot;
+sqldf(query9)</code></pre>
+<pre><code>##    nameFirst  nameLast yearID teamID HR
+## 1      Barry     Bonds   2001    SFN 73
+## 2       Mark   McGwire   1998    SLN 70
+## 3      Sammy      Sosa   1998    CHN 66
+## 4       Mark   McGwire   1999    SLN 65
+## 5      Sammy      Sosa   2001    CHN 64
+## 6      Sammy      Sosa   1999    CHN 63
+## 7      Roger     Maris   1961    NYA 61
+## 8       Babe      Ruth   1927    NYA 60
+## 9       Babe      Ruth   1921    NYA 59
+## 10    Jimmie      Foxx   1932    PHA 58
+## 11      Hank Greenberg   1938    DET 58
+## 12      Ryan    Howard   2006    PHI 58
+## 13      Luis  Gonzalez   2001    ARI 57
+## 14      Alex Rodriguez   2002    TEX 57
+## 15      Hack    Wilson   1930    CHN 56
+## 16       Ken   Griffey   1997    SEA 56
+## 17       Ken   Griffey   1998    SEA 56
+## 18      Babe      Ruth   1920    NYA 54
+## 19      Babe      Ruth   1928    NYA 54
+## 20     Ralph     Kiner   1949    PIT 54
+## 21    Mickey    Mantle   1961    NYA 54
+## 22     David     Ortiz   2006    BOS 54
+## 23      Alex Rodriguez   2007    NYA 54
+## 24      Jose  Bautista   2010    TOR 54
+## 25     Chris     Davis   2013    BAL 53
+## 26    Mickey    Mantle   1956    NYA 52
+## 27    Willie      Mays   1965    SFN 52
+## 28    George    Foster   1977    CIN 52
+## 29      Mark   McGwire   1996    OAK 52
+## 30      Alex Rodriguez   2001    TEX 52
+## 31       Jim     Thome   2002    CLE 52
+## 32     Ralph     Kiner   1947    PIT 51
+## 33    Johnny      Mize   1947    NY1 51
+## 34    Willie      Mays   1955    NY1 51
+## 35     Cecil   Fielder   1990    DET 51
+## 36    Andruw     Jones   2005    ATL 51</code></pre>
+<p>Babe ruth with his team name using Teams database</p>
+<pre class="r"><code>query10&lt;-&quot;Select playerID, Batting.yearID, name, Batting.HR 
+From Batting Inner Join Teams 
+On Batting.teamID=Teams.teamID AND Batting.yearID=Teams.yearID
+Where playerID='ruthba01'
+order by Batting.HR Desc&quot;
+sqldf(query10)</code></pre>
+<pre><code>##    playerID yearID             name HR
+## 1  ruthba01   1927 New York Yankees 60
+## 2  ruthba01   1921 New York Yankees 59
+## 3  ruthba01   1920 New York Yankees 54
+## 4  ruthba01   1928 New York Yankees 54
+## 5  ruthba01   1930 New York Yankees 49
+## 6  ruthba01   1926 New York Yankees 47
+## 7  ruthba01   1924 New York Yankees 46
+## 8  ruthba01   1929 New York Yankees 46
+## 9  ruthba01   1931 New York Yankees 46
+## 10 ruthba01   1923 New York Yankees 41
+## 11 ruthba01   1932 New York Yankees 41
+## 12 ruthba01   1922 New York Yankees 35
+## 13 ruthba01   1933 New York Yankees 34
+## 14 ruthba01   1919   Boston Red Sox 29
+## 15 ruthba01   1925 New York Yankees 25
+## 16 ruthba01   1934 New York Yankees 22
+## 17 ruthba01   1918   Boston Red Sox 11
+## 18 ruthba01   1935    Boston Braves  6
+## 19 ruthba01   1915   Boston Red Sox  4
+## 20 ruthba01   1916   Boston Red Sox  3
+## 21 ruthba01   1917   Boston Red Sox  2
+## 22 ruthba01   1914   Boston Red Sox  0</code></pre>
 
 
 
