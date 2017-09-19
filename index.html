@@ -504,6 +504,23 @@ sqldf(query10)</code></pre>
 ## 20 ruthba01   1916   Boston Red Sox  3
 ## 21 ruthba01   1917   Boston Red Sox  2
 ## 22 ruthba01   1914   Boston Red Sox  0</code></pre>
+<p>joins List all the players named Bob who averaged more than one million dollars per year in salary for their career. Include Last Name We will use colnames: Master and Salaries</p>
+<pre class="r"><code>query11&lt;- &quot;Select nameFirst,nameLast,nameLast,avg(salary) 
+From Master Inner Join Salaries
+On Master.playerID=Salaries.playerID
+Where nameFirst='Bob'
+Group by Master.playerID
+Having avg(salary)&gt;1000000&quot;
+sqldf(query11)</code></pre>
+<pre><code>##   nameFirst  nameLast  nameLast avg(salary)
+## 1       Bob     Boone     Boone     1047580
+## 2       Bob    Horner    Horner     1416667
+## 3       Bob     Howry     Howry     1804583
+## 4       Bob     Ojeda     Ojeda     1035926
+## 5       Bob   Stanley   Stanley     1067500
+## 6       Bob Tewksbury Tewksbury     1288182
+## 7       Bob     Welch     Welch     1930417
+## 8       Bob   Wickman   Wickman     2635813</code></pre>
 
 
 

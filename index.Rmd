@@ -125,6 +125,10 @@ Where playerID='ruthba01'
 order by Batting.HR Desc"
 sqldf(query10)
 ```
+joins
+List all the players named Bob who averaged more than one million dollars per year in salary
+for their career. Include Last Name
+We will use colnames: Master and Salaries
 
 ```{r}
 query11<- "Select nameFirst,nameLast,nameLast,avg(salary) 
