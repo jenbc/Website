@@ -126,3 +126,12 @@ order by Batting.HR Desc"
 sqldf(query10)
 ```
 
+```{r}
+query11<- "Select nameFirst,nameLast,nameLast,avg(salary) 
+From Master Inner Join Salaries
+On Master.playerID=Salaries.playerID
+Where nameFirst='Bob'
+Group by Master.playerID
+Having avg(salary)>1000000"
+sqldf(query11)
+```
