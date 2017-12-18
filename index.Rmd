@@ -3,7 +3,7 @@ title: "Usage of SQL"
 output: html_document
 ---
 
-Filtering Rows and Comlums 
+# Filtering Rows and Comlums 
 
 With SQL we can filter coloumns with SELECT and rows with WHERE. To show this I will use the Lahman package on RStudio, which is a baseball database. First, we need to need to install the two packages: Lahman and sqldf. 
 
@@ -13,43 +13,55 @@ library(Lahman)
 library(sqldf)
 ```
 
-Suppose we want to see the total number of homeruns for the Yankees in 1927. We could write the following
+Suppose we want to see the total number of homeruns for the Yankees in 1927. We could write the following:
+
 ```{r}
 query<-"SELECT playerID,yearID,teamID,HR From Batting
 Where teamID='NYA' and yearID=1927"
 sqldf(query)
 ```
+
 Batting
 colnames(Batting)
 
-Here we will learn how to create a query for New York Yankee player that have more than 40 homeruns
+Here we will learn how to create a query for New York Yankee players that have more than 40 homeruns.
+
 ```{r}
 query<-"SELECT playerID,yearID,teamID,HR From Batting
 Where teamID='NYA' and HR>=40"
 sqldf(query)
 ```
-Examples of player having more than 40HR but less than 60strikeouts(SO)
+
+We will narrow the output more with a query example of players having more than 40 homeruns (HR) but less than 60 strikeouts(SO)
+
 ```{r}
 query1<-"SELECT playerID,yearID,teamID,SO,HR From Batting
 Where SO<60 and HR>40"
 sqldf(query1)
 ```
-Instances of Phillies in the 1970's hitting more than 30 homeruns
+
+We are producing the instances of Phillies in the 1970's hitting more than 30 homeruns
+
 ```{r}
 query2<-"SELECT playerID,yearID,teamID,HR From Batting
 Where yearID>1970 and yearID<1979 and HR>=30 and teamID='PHI'"
 sqldf(query2)
 ```
-Ranking Data 
+
+# Ranking Data 
+
 For this example we will present
 Player hits with more than 50 homeruns but lets have players with the most homeruns at the top 
+
 ```{r}
 query3<-"SELECT playerID,yearID,teamID,HR From Batting
 Where HR>=50
 Order By HR DESC"
 sqldf(query3)
 ```
+
 Find ll instances ofa player striking out less than 10 times. At least 400 at-bat(AB). Players with least SO at top
+
 ```{r}
 query4<-"SELECT playerID,yearID,teamID,SO, AB From Batting
 Where AB>=400 and SO<10
@@ -57,10 +69,10 @@ Order by SO"
 sqldf(query4)
 ```
 
-Aggregation
-Aggreation is the clustering of pieces to output one final result. This can be achieved my using 
-grouping and Sum and average. Continuing with our use of the Lahman database
-Example 1
+# Aggregation
+
+Aggreation is the clustering of pieces to output one final result. This can be achieved my using grouping and Sum and average. Continuing with our use of the Lahman database we will:
+
 Find Babe Ruth's career homerun total and squash it into one
 no comma after homerun
 ```{r}
@@ -70,7 +82,8 @@ Group by playerID"
 
 sqldf(query5)
 ```
-find the homerun totals of all players but limit the display to only those that hit 600 or 
+
+Find the homerun totals of all players but limit the display to only those that hit 600 or 
 more. The players with the highest total at the top
 where is filtering before group and having is grouping after
 ```{r}
@@ -81,6 +94,9 @@ Order by sum(HR) Desc"
 
 sqldf(query6)
 ```
+
+# Ordering
+
 Here we will find the players with the highest homerun average over their career.
 We will filter out those who have an average of more than 30 HR showing players with the best 
 average at the top
@@ -93,12 +109,9 @@ Order by avg(HR) Desc"
 
 sqldf(query7)
 ```
-Joins
-this is the joining of two tables using the common variable in both tables using Inner Join and
- On Table1.variable=Table2.variable. When mentioning the variable I have to specify which
-table it is coming from as seen in the Where table.variable example
-list firstname, lastname, year, teamID and HR
-colnames(master) #to find other details
+# Joins
+This is the joining of two tables using the common variable in both tables using Inner Join and "On Table1.variable=Table2.variable."  When mentioning the variable I have to specify which table it is coming from as seen in the Where table.variable.
+
 ```{r}
 query8<-"select nameFirst, nameLast, yearID, teamID, HR 
 From Batting Inner Join Master
@@ -116,7 +129,9 @@ Where Hr>50
 order by HR Desc"
 sqldf(query9)
 ```
-Babe ruth with his team name using Teams database
+
+Our next example is showing Babe Ruth with his team name using the Teams database
+
 ```{r}
 query10<-"Select playerID, Batting.yearID, name, Batting.HR 
 From Batting Inner Join Teams 
@@ -125,9 +140,8 @@ Where playerID='ruthba01'
 order by Batting.HR Desc"
 sqldf(query10)
 ```
-joins
-List all the players named Bob who averaged more than one million dollars per year in salary
-for their career. Include Last Name
+
+For our next example we will list all the players named Bob who averaged more than one million dollars per year in salary for their career, including Last Name. 
 We will use colnames: Master and Salaries
 
 ```{r}
